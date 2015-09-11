@@ -8,10 +8,15 @@ using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 
 namespace WebApplication70
 {
+    [OutputElementHint("ul")]
     public class ControllerNavigationTagHelper : TagHelper
     {
-        [Activate]
-        private IUrlHelper UrlHelper { get; set; }
+        public ControllerNavigationTagHelper(IUrlHelper urlHelper)
+        {
+            UrlHelper = urlHelper;
+        }
+
+        private IUrlHelper UrlHelper { get; }
 
         public Type ControllerType { get; set; }
 
@@ -36,7 +41,7 @@ namespace WebApplication70
             {
                 if (!string.Equals(name, Exclude, StringComparison.OrdinalIgnoreCase))
                 {
-                    var displayName = 
+                    var displayName =
                         string.Equals(name, "Index", StringComparison.OrdinalIgnoreCase) ? controllerName : name;
                     output.PostContent.Append($"<li><a href='{UrlHelper.Action(name, controllerName)}'>{displayName}</a></li>");
                 }
